@@ -1,5 +1,5 @@
 require 'pp'
-require_relative "Monopoly.rb"
+require_relative "../monopoly.rb"
 
 describe Monopoly, "new app" do
  
@@ -18,18 +18,26 @@ describe Monopoly, "new app" do
   end
 
   it "play turn" do
-    @stubbed_dice.stub(:roll) {7}
+    @stubbed_dice.stub(:roll) {5}
     @monopoly.add_player Player.new
     @monopoly.play_turn
 
     @monopoly.player.status.should_not eq('go')
   end
 
-    it "play turn random" do
-      @stubbed_dice.stub(:roll) {7}
-      @monopoly.add_player Player.new
-      @monopoly.play_turn
+  it "play turn random" do
+    @stubbed_dice.stub(:roll) {5}
+    @monopoly.add_player Player.new
+    @monopoly.play_turn
 
-      @monopoly.player.status.should eq('square 7')
+    @monopoly.player.status.should eq('square 5')
   end
+
+  it 'return status of the game' do
+    @stubbed_dice.stub(:roll) {5}
+    @monopoly.add_player Player.new
+    @monopoly.play_turn
+    @monopoly.status.should =~ /square \d{1,2}/
+  end
+
 end

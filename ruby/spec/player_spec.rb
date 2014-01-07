@@ -1,5 +1,5 @@
 require 'pp'
-require_relative "Player.rb"
+require_relative "../player.rb"
 
 
 describe Player, "play turn" do
@@ -15,10 +15,10 @@ describe Player, "play turn" do
     player.status.should eq("go") 
   end
 
-it "goto take the player to the new position" do
-  player = Player.new(6)
-  player.advance(5)
-  player.status.should eq("square 11")
+  it "goto take the player to the new position" do
+    player = Player.new(6)
+    player.advance(5)
+    player.status.should eq("square 11")
   end
 
 end

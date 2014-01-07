@@ -1,3 +1,6 @@
+require_relative 'dice'
+require_relative 'player'
+
 class Monopoly
   attr_reader :player
 
@@ -10,9 +13,13 @@ class Monopoly
   end
 
   def play_turn 
-    @player.advance(@dice.roll) 
+    @player.advance(@dice.roll)  
   end
+
+  def status
+    "player status #{@player.status}"
+  end
+
+  
 end
 
-class Dice
-end

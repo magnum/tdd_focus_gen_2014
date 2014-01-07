@@ -1,26 +1,18 @@
 class Monopoly
-  DEBUG = false
+  attr_reader :player
 
-  attr_reader :status
-
-  def initialize(position=0)
-    @position = position
+  def initialize(dice = Dice.new)
+    @dice = dice
   end
 
-  def status
-    return 'go' if @position == 0
-    "square #{@position}"
+  def add_player (player)
+    @player = player
   end
 
-  def play_turn
-    dbg "before #{@position}"
-    @position += 1
-    @position = @position % 40
-    dbg "after #{@position}"
+  def play_turn 
+    @player.advance(@dice.roll) 
   end
+end
 
-  def dbg(obj)
-    puts "#{obj}" if DEBUG
-  end
-
+class Dice
 end

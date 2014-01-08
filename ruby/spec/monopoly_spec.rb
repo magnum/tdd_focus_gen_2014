@@ -5,7 +5,7 @@ require_relative "../monopoly.rb"
 describe Monopoly, "new app" do
  
   before do
-    @test_players = YAML::load(File.open('config.yml'))['test']['players']
+    @test_players = YAML::load(File.open('config.yml'))['test']['players'].shuffle
     @players = []
     @test_players.each_with_index do |p, index| 
         @players << instance_variable_set("@player#{index+1}", Player.new(p['name']))

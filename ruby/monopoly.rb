@@ -13,10 +13,12 @@ class Monopoly
   end
 
   def add_player (what)
-    player = what.is_a?(String) ? Player.new(what) : what
+    player = nil
+    player = Player.new(what) if what.is_a?(String)
+    player = what if what.respond_to?(:status) && what.respond_to?(:advance)
     @current_player = player if @players.empty?
     @players << player
-    
+    @players.last
   end
 
   def play_turn 

@@ -1,9 +1,12 @@
 require 'pp'
+require 'colorize'
 require 'yaml'
 require_relative 'monopoly'
 
 
 class Runner
+
+  COLORS = [:red, :green, :blue, :yellow]
 
   @debug = false
   attr_reader :monopoly
@@ -43,8 +46,9 @@ class Runner
   def draw
     #draw...
     puts "-" * Monopoly::SIZE + "|"
-    @monopoly.players.each do |p|
-      puts "#{' ' * p.position}[#{p.status}] #{p.name}"
+    @monopoly.players.each_with_index do |p,index|
+      color = COLORS[index % COLORS.length]
+      puts "#{' ' * p.position}[#{p.status}] #{p.name.send(color)}"
     end
     puts "-" * Monopoly::SIZE + "|"
 

@@ -22,23 +22,22 @@ class Runner
     draw
   end
 
-  def run
+  def run_interactive
     # playing the game
     puts "\nPress return to play turn..."
     while s = STDIN.gets
-      @turns += 1
-      if @debug
-        system("clear") #if @turns > 1 && (@turns % 2 == 0)
-        puts "BEFORE" 
-        draw
-        status = monopoly.play_turn
-        puts "THEN #{status}, SO... \n"
-        draw #draw the monopoly status
-      else 
-        puts monopoly.play_turn
-        draw
-      end
+      run_turn
     end 
+  end
+
+  def run_turn
+    @turns += 1
+    if @debug
+      system("clear") #if @turns > 1 && (@turns % 2 == 0)
+      draw
+    end
+    puts "##{@turns} - #{monopoly.play_turn}"
+    draw 
   end
 
   def draw
@@ -53,9 +52,21 @@ class Runner
 
 end
 
-
-runner = Runner.new
-runner.run
+begin
+  runner = Runner.new
+  if ARGV.index("demo")
+    100.times do  
+      runner.run_turn
+      sleep 1
+    end
+  else
+    runner.run_interactive
+  end
+rescue SystemExit, Interrupt
+  raise
+rescue Exception => e
+  #...
+end
 
 
 

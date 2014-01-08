@@ -12,7 +12,7 @@ describe Dice, "new app" do
   end
 
   it "dice is rolled result shoul be between 1 and 6" do
-    (1..6).should include(@dice.roll)
+    100.times { (1..6).should include(@dice.roll) }
   end
 
   

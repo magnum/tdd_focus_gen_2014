@@ -1,20 +1,24 @@
 class Player
   DEBUG = false
+  POSITION_PREFIX = "square"
 
-  attr_reader :status
+  attr_reader :name
+  attr_reader :position
 
-  def initialize(position=0)
+  def initialize(name, position=0)
+    @name = name
     @position = position
   end
 
   def status
     return 'go' if @position == 0
-    "square #{@position}"
+    "#{POSITION_PREFIX} #{@position}"
   end
 
-  def advance (position)
-    @position += position
+  def advance(steps)
+    @position += steps
     @position = @position % 40
+    "#{@name} advances #{steps} and lands on #{POSITION_PREFIX} #{@position}"
   end
 
   def dbg(obj)

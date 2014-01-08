@@ -1,43 +1,69 @@
+require 'yaml'
 require 'pp'
 require_relative "../monopoly.rb"
 
 describe Monopoly, "new app" do
  
   before do
-    @stubbed_dice = double(:dice)
-    @monopoly =  Monopoly.new(@stubbed_dice)
+    @test_players = YAML::load(File.open('config.yml'))['test']['players']
+    @players = []
+    @test_players.each_with_index do |p, index| 
+        @players << instance_variable_set("@player#{index+1}", Player.new(p['name']))
+    end
+    @monopoly =  Monopoly.new(Dice.new)
   end
 
   it "creates a monopoly" do
-    @monopoly.player.should be_nil
+    @monopoly.current_player.should be_nil
   end
 
-  it "add new player to the game" do
-    @monopoly.add_player(Player.new)
-    @monopoly.player.should_not be_nil
+  it "add new player to the game passing the string of the name" do
+    name = @test_players.first['name']
+    @monopoly.add_player name
+    @monopoly.current_player.name.should  eq(name)
   end
 
-  it "play turn" do
-    @stubbed_dice.stub(:roll) {5}
-    @monopoly.add_player Player.new
-    @monopoly.play_turn
-
-    @monopoly.player.status.should_not eq('go')
+  it "add new player to the game passing a string" do
+    @monopoly.add_player(@player1)
+    @monopoly.current_player.should  eq(@player1)
   end
+
+  it "add 4 players to the game" do
+    @players.each { |p| @monopoly.add_player(p) }
+    @monopoly.players.length.should eq(4)
+  end  
+
 
   it "play turn random" do
-    @stubbed_dice.stub(:roll) {5}
-    @monopoly.add_player Player.new
-    @monopoly.play_turn
-
-    @monopoly.player.status.should eq('square 5')
+    dice_result = 5
+    dice = double(dice)
+    dice.stub(:roll) {dice_result}
+    monopoly = Monopoly.new dice
+    monopoly.add_player @player1
+    status = monopoly.play_turn
+    status.should eq("#{@player1.name} advances #{dice_result} and lands on square #{dice_result}")
   end
 
-  it 'return status of the game' do
-    @stubbed_dice.stub(:roll) {5}
-    @monopoly.add_player Player.new
+
+  # move
+
+  it "add n players to the game and the current_player must be the 1st added" do
+    @players.each { |p| @monopoly.add_player(p) }
+    @monopoly.current_player.should eq(@players.first)
+  end  
+
+  it "added n players to the game, after the 1st play_turn, the current_player is the 2nd player" do
+    @players.each { |p| @monopoly.add_player(p) }
     @monopoly.play_turn
-    @monopoly.status.should =~ /square \d{1,2}/
-  end
+    @monopoly.current_player.should eq(@players[1])
+  end  
+
+
+  it "added n players to the game, after all players have played 1 time, the current_player is the 1st player again" do
+    @players.each { |p| @monopoly.add_player(p) }
+    @players.length.times { @monopoly.play_turn }
+    @monopoly.current_player.should eq(@players.first)
+  end  
+
 
 end

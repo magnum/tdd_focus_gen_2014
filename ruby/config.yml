@@ -1,0 +1,6 @@
+test:
+  players:
+    - name: "Mr. Black"
+    - name: "Mrs. White"
+    - name: "Sr. Dog"
+    - name: "Super Fish"
